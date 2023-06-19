@@ -1,0 +1,22 @@
+{
+  "name": "beardgelcat",
+  "version": "1.0.0",
+  "description": "A discrod bot for Beardgel, nicknamed Beardgel Cat",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "@surajgoraya",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.3.1",
+    "npm": "^9.7.1",
+    "undici": "^5.22.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
