@@ -1,14 +1,13 @@
 // Grab configuration environment.
 require('dotenv').config();
-
 const { request } = require('undici');
+const cron = require('node-cron');
 
 const _TOKEN = process.env.DISCORD_TOKEN;
+const _SEND_CHANNEL = process.env.CHANNEL_ID;
 
-
-const { Client, Events, GatewayIntentBits, Activity, ActivityType } = require('discord.js');
-
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages] });
+const { AttachmentBuilder, Client, Events, GatewayIntentBits, Activity, ActivityType } = require('discord.js');
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages]});
 
 
 // Log in to Discord with your client's token
@@ -22,6 +21,14 @@ client.once(Events.ClientReady, c => {
     client.user.setPresence({
         status: 'idle',
         afk: true,
+    })
+
+    /**
+     * Automated job, runs at 8:30 daily - gets the dates for starfield.
+     */
+    cron.schedule("30 8 * * *", async () => {
+        const channel = c.channels.cache.find(channel => channel.id === _SEND_CHANNEL);
+        channel.send(`Morning @everyone, ${await get_starfield()}`);
     })
 });
 
