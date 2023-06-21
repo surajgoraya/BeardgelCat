@@ -40,7 +40,7 @@ client.once(Events.ClientReady, c => {
         .execSync(`git log -1 --pretty="format:%s"`)
         .toString().trim()
 
-        MessageMainChannel(`I've learned new tricks!: ${revision} `)
+        MessageMainChannel(c, `I've learned new tricks!: ${revision} `)
     }
 
     /**
