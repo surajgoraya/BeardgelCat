@@ -44,6 +44,11 @@ client.once(Events.ClientReady, c => {
 });
 
 client.on(Events.MessageCreate, async (message) => {
+    if(message.author.id !== client.user.id && message.content.toLowerCase().includes('good kitty')) {
+        await message.react('❤️');
+        await message.react('😽');
+    }
+
     if (message.mentions.users.get(client.user.id) && message.author.id !== client.user.id) {
         if (message.content.toLowerCase().includes('starfield')) {
             message.reply({ content: ` ${await get_starfield()} ${message.author}` });
