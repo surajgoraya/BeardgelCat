@@ -20,7 +20,7 @@ client.login(_TOKEN);
 
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
-client.once(Events.ClientReady, c => {
+client.once(Events.ClientReady, async c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
     client.user.setPresence({
         status: 'idle',
@@ -28,19 +28,22 @@ client.once(Events.ClientReady, c => {
     });
 
     if(!_SHOULD_BE_QUIET){
+        console.log(`Not in Quiet Mode, sending out stuff`);
         delay(100);
         const embedHelloGif = new EmbedBuilder()
         .setColor('#FF8DC4')
         .setTitle('That was a good nap :) - Back online meow.')
         .setImage('https://media1.giphy.com/media/9SVdZvlJYzTdS/giphy.gif');
        
-        MessageMainChannelWithEmbed(c, embedHelloGif);
+        await MessageMainChannelWithEmbed(c, embedHelloGif);
 
         const revision = require('child_process')
         .execSync(`git log -1 --pretty="format:%s"`)
         .toString().trim()
 
-        MessageMainChannel(c, `I've learned new tricks!: ${revision} `)
+        await MessageMainChannel(c, `I've learned new tricks!: \n\n * ${revision} `);
+        
+        console.log(`Not in Quiet Mode, sending out stuff`);
     }
 
     /**
