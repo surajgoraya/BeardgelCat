@@ -54,7 +54,7 @@ const get_starfield = async () => {
 
 process.on('SIGINT', async function () {
     console.log("Got SIGINT, shutting down.");
-    const channel = c.channels.cache.find(channel => channel.id === _SEND_CHANNEL);
+    const channel = client.channels.cache.find(channel => channel.id === _SEND_CHANNEL);
     channel.send(`Meow. The server is restarting, if I don't come back in a few minutes, please tell me I was a good kitty ❤️`);
     await delay(2000);
     process.exit(0);
