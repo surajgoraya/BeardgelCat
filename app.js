@@ -4,6 +4,7 @@ const { request } = require('undici');
 const cron = require('node-cron');
 
 const _TOKEN = process.env.DISCORD_TOKEN;
+const _SHOULD_BE_QUIET = process.env.QUIET_NOTIFY === 'yes';
 
 
 const { AttachmentBuilder, Client, Events, GatewayIntentBits, Activity, ActivityType, EmbedBuilder } = require('discord.js');
@@ -24,14 +25,15 @@ client.once(Events.ClientReady, c => {
         afk: true,
     });
 
-    delay(100);
-
-    const embedHelloGif = new EmbedBuilder()
-    .setColor('#FF8DC4')
-    .setTitle('That was a good nap :) - Back online, meow.')
-    .setImage('https://media1.giphy.com/media/9SVdZvlJYzTdS/giphy.gif');
-    
-    MessageMainChannelWithEmbed(c, embedHelloGif)
+    if(!_SHOULD_BE_QUIET){
+        delay(100);
+        const embedHelloGif = new EmbedBuilder()
+        .setColor('#FF8DC4')
+        .setTitle('That was a good nap :) - Back online, meow.')
+        .setImage('https://media1.giphy.com/media/9SVdZvlJYzTdS/giphy.gif');
+        
+        MessageMainChannelWithEmbed(c, embedHelloGif)
+    }
 
     /**
      * Automated job, runs at 8:30 daily - gets the dates for starfield.
@@ -62,11 +64,13 @@ const get_starfield = async () => {
 }
 
 process.on('SIGINT', async function () {
-    console.log("Got SIGINT, shutting down.");
-
-    MessageMainChannel(client, `Meow. The server is restarting, if I don't come back in a few minutes, please tell me I was a good kitty ❤️`);
     
-    await delay(2000);
+    if(!_SHOULD_BE_QUIET){
+        console.log("Got SIGINT, shutting down.");
+        MessageMainChannel(client, `Meow. The server is restarting, if I don't come back in a few minutes, please tell me I was a good kitty ❤️`);
+        await delay(2000);
+    }
+
     process.exit(0);
 });
 
