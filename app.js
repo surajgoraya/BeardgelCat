@@ -66,7 +66,7 @@ client.on(Events.MessageCreate, async (message) => {
         if (message.content.toLowerCase().includes('starfield')) {
             message.reply({ content: ` ${await get_starfield()[0]} ${message.author}` });
         } else {
-            const RandomReply = UNKNOWN_COMMAND_REPLIES[Math.floor(Math.random() * array.length)];
+            const RandomReply = UNKNOWN_COMMAND_REPLIES[Math.floor(Math.random() * UNKNOWN_COMMAND_REPLIES.length)];
             message.reply({ content: `${RandomReply}` });
         }
     }
