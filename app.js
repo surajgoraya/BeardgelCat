@@ -7,7 +7,7 @@ const _TOKEN = process.env.DISCORD_TOKEN;
 const _SEND_CHANNEL = process.env.CHANNEL_ID;
 
 const { AttachmentBuilder, Client, Events, GatewayIntentBits, Activity, ActivityType } = require('discord.js');
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages]});
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages] });
 
 
 // Log in to Discord with your client's token
@@ -35,7 +35,7 @@ client.once(Events.ClientReady, c => {
 client.on(Events.MessageCreate, async (message) => {
     if (message.mentions.users.get(client.user.id) && message.author.id !== client.user.id) {
         if (message.content.toLowerCase().includes('starfield')) {
-            message.reply({ content: ` ${await get_starfield()} ${message.author}` }); 
+            message.reply({ content: ` ${await get_starfield()} ${message.author}` });
         } else {
             message.reply({ content: `Meow. ${message.author}` });
         }
@@ -43,8 +43,8 @@ client.on(Events.MessageCreate, async (message) => {
 });
 
 const get_starfield = async () => {
-    const req = await request('https://count.beardgel.ca/api/countdowns', {headers: {'User-Agent': 'BeardgelCat/1.0.0'}})
-    if(req.statusCode === 200) {
+    const req = await request('https://count.beardgel.ca/api/countdowns', { headers: { 'User-Agent': 'BeardgelCat/1.0.0' } })
+    if (req.statusCode === 200) {
         const decoded = await req.body.json();
         return `${decoded.Countdowns[0].text} ${decoded.Countdowns[0].friendly_date}, Meow!`
     } else {
@@ -52,3 +52,14 @@ const get_starfield = async () => {
     }
 }
 
+process.on('SIGINT', async function () {
+    console.log("Got SIGINT, shutting down.");
+    const channel = c.channels.cache.find(channel => channel.id === _SEND_CHANNEL);
+    channel.send(`Meow. The server is restarting, if I don't come back in a few minutes, please tell me I was a good kitty ❤️`);
+    await delay(2000);
+    process.exit(0);
+});
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
