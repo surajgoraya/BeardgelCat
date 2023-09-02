@@ -48,12 +48,14 @@ client.once(Events.ClientReady, async c => {
 
     /**
      * Automated job, runs at 8:30 daily - gets the dates for starfield.
+     *- 
+     * Comment out the cron job for now that starfield is out.
      */
-    cron.schedule("30 8 * * *", async () => {
-        const starfield_message = await get_starfield();
-        MessageMainChannel(c, `Morning @everyone, ${starfield_message[0]}`)
-        MessageMainChannel(c, `${starfield_message[1]}`)
-    })
+    // cron.schedule("30 8 * * *", async () => {
+    //     const starfield_message = await get_starfield();
+    //     MessageMainChannel(c, `Morning @everyone, ${starfield_message[0]}`)
+    //     MessageMainChannel(c, `${starfield_message[1]}`)
+    // })
 });
 
 client.on(Events.MessageCreate, async (message) => {
